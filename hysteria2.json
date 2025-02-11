@@ -45,11 +45,11 @@
     {
       "type": "hysteria2",
       "tag": "proxy",
-      "server": "23.94.131.184",
-      "server_port": 443,
+      "server": "你的服务器ip",
+      "server_port": 你的服务器端口,
       "up_mbps": 20,
       "down_mbps": 50,
-      "password": "123456",
+      "password": "你的服务器密码",
       "tls": {
         "enabled": true,
         "server_name": "bing.com",
