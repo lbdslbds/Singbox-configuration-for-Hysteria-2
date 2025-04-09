@@ -46,7 +46,7 @@
       "type": "hysteria2",
       "tag": "proxy",
       "server": "你的服务器ip",
-      "server_port": 你的服务器端口,
+      "server_port": "你的服务器端口",
       "up_mbps": 20,
       "down_mbps": 50,
       "password": "你的服务器密码",
