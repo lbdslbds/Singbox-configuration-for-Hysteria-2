@@ -1,4 +1,10 @@
 {
+  "log": {
+    "disabled": false,
+    "level": "info",
+    "output": "",
+    "timestamp": false
+  },
   "dns": {
     "servers": [
       {
@@ -44,15 +50,15 @@
   "outbounds": [
     {
       "type": "hysteria2",
-      "tag": "proxy",
+      "tag": "Hysteria2 节点",
       "server": "你的服务器ip",
-      "server_port": "你的服务器端口",
-      "up_mbps": 20,
-      "down_mbps": 50,
+      "server_port": "你的服务器端口，可以不加引号例如直接填写443",
+      "up_mbps": "上行速率",
+      "down_mbps": "下行速率",
       "password": "你的服务器密码",
       "tls": {
         "enabled": true,
-        "server_name": "bing.com",
+        "server_name": "您的域名或服务器端使用的域名",
         "insecure": true
       }
     },
@@ -92,21 +98,21 @@
         "type": "remote",
         "format": "binary",
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
-        "download_detour": "proxy"
+        "download_detour": "Hysteria2 节点"
       },
       {
         "tag": "geosite-cn",
         "type": "remote",
         "format": "binary",
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
-        "download_detour": "proxy"
+        "download_detour": "Hysteria2 节点"
       },
       {
         "tag": "geosite-category-ads-all",
         "type": "remote",
         "format": "binary",
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
-        "download_detour": "proxy"
+        "download_detour": "Hysteria2 节点"
       }
     ],
     "auto_detect_interface": true

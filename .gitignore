@@ -1,0 +1,5 @@
+# Ignore executable files
+*.exe
+
+# Ignore dynamic link libraries
+*.dll

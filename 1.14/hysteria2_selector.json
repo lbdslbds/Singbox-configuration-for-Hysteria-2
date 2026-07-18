@@ -1,0 +1,513 @@
+{
+    "log": {
+        "disabled": false,
+        "level": "info",
+        "output": "",
+        "timestamp": false
+    },
+    "experimental": {
+        "clash_api": {
+            "external_controller": "127.0.0.1:9090",
+            "secret": "",
+            "default_mode": "rule"
+        },
+        "cache_file": {
+            "enabled": true,
+            "path": "cache.db",
+            "store_dns": true
+        }
+    },
+    "http_clients": [
+        {
+            "tag": "proxy-client",
+            "detour": "Hysteria2 节点"
+        }
+    ],
+    "inbounds": [
+        {
+            "type": "mixed",
+            "tag": "mixed-in",
+            "listen": "127.0.0.1",
+            "listen_port": 20122,
+            "tcp_fast_open": false,
+            "udp_fragment": false
+        },
+        {
+            "type": "tun",
+            "tag": "tun-in",
+            "interface_name": "",
+            "address": [
+                "172.18.0.1/30",
+                "fdfe:dcba:9876::1/126"
+            ],
+            "mtu": 9000,
+            "auto_route": true,
+            "strict_route": true,
+            "stack": "mixed",
+            "platform": {
+                "http_proxy": {
+                    "enabled": true,
+                    "server": "127.0.0.1",
+                    "server_port": 20122
+                }
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "type": "hysteria2",
+            "tag": "Hysteria2 节点",
+            "server": "你的服务器ip",
+            "server_port": "你的服务器端口，可以不加引号例如直接填写443",
+            "server_ports": [
+                "如果开启了端口跳跃请填写,例如20000:50000,如果没有请删除"
+            ],
+            "up_mbps": "上行速率",
+            "down_mbps": "下行速率",
+            "password": "你的服务器密码",
+            "tls": {
+                "enabled": true,
+                "server_name": "您的域名或服务器端使用的域名",
+                "insecure": true
+            }
+        },
+        {
+            "type": "selector",
+            "tag": "🚀 代理模式",
+            "interrupt_exist_connections": true,
+            "outbounds": [
+                "Hysteria2 节点",
+                "🎯 全球直连"
+            ]
+        },
+        {
+            "type": "direct",
+            "tag": "🎯 全球直连"
+        },
+        {
+            "type": "block",
+            "tag": "🚫 广告拦截"
+        }
+    ],
+    "route": {
+        "rules": [
+            {
+                "action": "sniff",
+                "inbound": "tun-in"
+            },
+            {
+                "action": "hijack-dns",
+                "protocol": "dns"
+            },
+            {
+                "action": "reject",
+                "protocol": "quic"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "Category-Ads"
+                ],
+                "outbound": "🚫 广告拦截"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "GeoSite-Private"
+                ],
+                "outbound": "🎯 全球直连"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "GeoIP-Private"
+                ],
+                "outbound": "🎯 全球直连"
+            },
+            {
+                "action": "route",
+                "clash_mode": "direct",
+                "outbound": "🎯 全球直连"
+            },
+            {
+                "action": "route",
+                "clash_mode": "global",
+                "outbound": "🚀 代理模式"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "Github"
+                ],
+                "outbound": "🚀 代理模式"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "bilibili@!cn"
+                ],
+                "outbound": "🚀 代理模式"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "OpenAI",
+                    "Claude",
+                    "Gemini"
+                ],
+                "outbound": "🚀 代理模式"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "Telegram",
+                    "Telegram_IP"
+                ],
+                "outbound": "🚀 代理模式"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "FaceBook"
+                ],
+                "outbound": "🚀 代理模式"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "X"
+                ],
+                "outbound": "🚀 代理模式"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "TikTok"
+                ],
+                "outbound": "🚀 代理模式"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "bilibili",
+                    "bilibili-cdn",
+                    "bilibili-game"
+                ],
+                "outbound": "🎯 全球直连"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "Disney"
+                ],
+                "outbound": "🚀 代理模式"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "Netflix"
+                ],
+                "outbound": "🚀 代理模式"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "Youtube"
+                ],
+                "outbound": "🚀 代理模式"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "Google"
+                ],
+                "outbound": "🚀 代理模式"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "Bing",
+                    "Bing-CN"
+                ],
+                "outbound": "🚀 代理模式"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "GeoLocation-CN"
+                ],
+                "outbound": "🎯 全球直连"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "GeoSite-CN"
+                ],
+                "outbound": "🎯 全球直连"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "GeoIP-CN"
+                ],
+                "outbound": "🎯 全球直连"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "GeoLocation-!CN"
+                ],
+                "outbound": "🚀 代理模式"
+            }
+        ],
+        "rule_set": [
+            {
+                "tag": "bilibili@!cn",
+                "type": "remote",
+                "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/bilibili@!cn.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "GeoLocation-CN",
+                "type": "remote",
+                "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/geolocation-cn.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "OpenAI",
+                "type": "remote",
+                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/refs/heads/rule-set/geosite-openai.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "Claude",
+                "type": "remote",
+                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/refs/heads/rule-set/geosite-anthropic.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "Gemini",
+                "type": "remote",
+                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/refs/heads/rule-set/geosite-google-gemini.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "Bing",
+                "type": "remote",
+                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/refs/heads/rule-set/geosite-bing.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "Bing-CN",
+                "type": "remote",
+                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/refs/heads/rule-set/geosite-bing@cn.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "Youtube",
+                "type": "remote",
+                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/refs/heads/rule-set/geosite-youtube.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "FaceBook",
+                "type": "remote",
+                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/refs/heads/rule-set/geosite-facebook.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "X",
+                "type": "remote",
+                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/refs/heads/rule-set/geosite-x.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "Github",
+                "type": "remote",
+                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/refs/heads/rule-set/geosite-github.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "Netflix",
+                "type": "remote",
+                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/refs/heads/rule-set/geosite-netflix.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "Disney",
+                "type": "remote",
+                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/refs/heads/rule-set/geosite-disney.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "bilibili",
+                "type": "remote",
+                "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/bilibili.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "bilibili-cdn",
+                "type": "remote",
+                "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/bilibili-cdn.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "bilibili-game",
+                "type": "remote",
+                "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/bilibili-game.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "TikTok",
+                "type": "remote",
+                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/refs/heads/rule-set/geosite-tiktok.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "Telegram",
+                "type": "remote",
+                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/refs/heads/rule-set/geosite-telegram.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "Telegram_IP",
+                "type": "remote",
+                "url": "https://raw.githubusercontent.com/lyc8503/sing-box-rules/refs/heads/rule-set-geoip/geoip-telegram.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "Google",
+                "type": "remote",
+                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/refs/heads/rule-set/geosite-google.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "Category-Ads",
+                "type": "remote",
+                "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/category-ads-all.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "GeoIP-Private",
+                "type": "remote",
+                "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/private.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "GeoSite-Private",
+                "type": "remote",
+                "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/private.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "GeoIP-CN",
+                "type": "remote",
+                "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/cn.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "GeoSite-CN",
+                "type": "remote",
+                "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/cn.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            },
+            {
+                "tag": "GeoLocation-!CN",
+                "type": "remote",
+                "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/geolocation-!cn.srs",
+                "format": "binary",
+                "http_client": "proxy-client"
+            }
+        ],
+        "auto_detect_interface": true,
+        "final": "🚀 代理模式",
+        "default_domain_resolver": {
+            "server": "Local-DNS"
+        }
+    },
+    "dns": {
+        "servers": [
+            {
+                "tag": "Local-DNS",
+                "type": "https",
+                "domain_resolver": "Local-DNS-Resolver",
+                "server_port": 443,
+                "server": "223.5.5.5",
+                "path": "/dns-query"
+            },
+            {
+                "tag": "Local-DNS-Resolver",
+                "type": "udp",
+                "server_port": 53,
+                "server": "223.5.5.5"
+            },
+            {
+                "tag": "Remote-DNS",
+                "type": "tls",
+                "detour": "Hysteria2 节点",
+                "domain_resolver": "Remote-DNS-Resolver",
+                "server_port": 853,
+                "server": "8.8.8.8"
+            },
+            {
+                "tag": "Remote-DNS-Resolver",
+                "type": "udp",
+                "detour": "Hysteria2 节点",
+                "server_port": 53,
+                "server": "8.8.8.8"
+            }
+        ],
+        "rules": [
+            {
+                "action": "route",
+                "clash_mode": "direct",
+                "server": "Local-DNS"
+            },
+            {
+                "action": "route",
+                "clash_mode": "global",
+                "server": "Remote-DNS"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "GeoSite-CN",
+                    "GeoLocation-CN",
+                    "bilibili",
+                    "bilibili-cdn",
+                    "bilibili-game",
+                    "GeoSite-Private"
+                ],
+                "server": "Local-DNS"
+            }
+        ],
+        "disable_cache": false,
+        "final": "Remote-DNS",
+        "strategy": "prefer_ipv4"
+    }
+}
