@@ -72,10 +72,6 @@
         {
             "type": "direct",
             "tag": "🎯 全球直连"
-        },
-        {
-            "type": "block",
-            "tag": "🚫 广告拦截"
         }
     ],
     "route": {
@@ -93,11 +89,10 @@
                 "protocol": "quic"
             },
             {
-                "action": "route",
+                "action": "reject",
                 "rule_set": [
                     "Category-Ads"
-                ],
-                "outbound": "🚫 广告拦截"
+                ]
             },
             {
                 "action": "route",
